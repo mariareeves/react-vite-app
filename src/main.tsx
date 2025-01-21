@@ -1,18 +1,22 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+// import './index.css'
 import App from './App.tsx'
 
 //import radix ui 
 import "@radix-ui/themes/styles.css";
+import "@radix-ui/themes/layout.css";
+
 // Import radix Theme
 import { Theme } from "@radix-ui/themes";
 
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Theme>
+    <Theme accentColor="green" radius="full" scaling="105%">
       <App />
     </Theme>
+
+
   </StrictMode>,
 );
