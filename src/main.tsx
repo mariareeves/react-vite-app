@@ -13,7 +13,7 @@ import { Theme } from "@radix-ui/themes";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Theme accentColor="green" radius="full" scaling="105%">
+    <Theme accentColor="pink" radius="large" scaling="105%">
       <App />
     </Theme>
 
