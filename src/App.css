@@ -1,5 +1,14 @@
+/* Import only the scales you need */
+@import "@radix-ui/colors/gray.css";
+@import "@radix-ui/colors/blue.css";
+@import "@radix-ui/colors/green.css";
+@import "@radix-ui/colors/red.css";
+@import "@radix-ui/colors/gray-dark.css";
+@import "@radix-ui/colors/blue-dark.css";
+@import "@radix-ui/colors/green-dark.css";
+@import "@radix-ui/colors/red-dark.css";
+
+
 .app-container {
   height: 100vh;
-  /* background-color: blueviolet; */
-
 }

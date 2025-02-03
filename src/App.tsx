@@ -1,105 +1,65 @@
 import './App.css';
-import React, { useState } from 'react';
-import { Heading, Button, Card, Flex, TextField, Checkbox, Container, Text, TabNav } from "@radix-ui/themes";
-import { PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
+import { Table, Container, TabNav } from "@radix-ui/themes";
+// import { PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons"
+import data from '../src/data.json';
+
+const formatDate = (isoString: string) => {
+  const date = new Date(isoString);
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+
+};
+
+const calculateDuration = (start: string, finish: string) => {
+  const startTime = new Date(start).getTime();
+  const finishTime = new Date(finish).getTime();
+  const durationSeconds = Math.floor((finishTime - startTime) / 1000);
+
+  const minutes = Math.floor(durationSeconds / 60);
+  const seconds = durationSeconds % 60;
+
+  return `${minutes}m ${seconds}s`;
+};
 
 
-interface Todo {
-  id: number;
-  text: string;
-  completed: boolean;
-}
 
-const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodoText, setNewTodoText] = useState<string>('');
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTodoText(event.target.value);
-  };
-
-  const addTodo = () => {
-    if (newTodoText.trim() !== '') {
-      const newTodo: Todo = {
-        id: Date.now(),
-        text: newTodoText,
-        completed: false,
-      };
-      setTodos([...todos, newTodo]);
-      setNewTodoText('');
-      console.log("todos ", todos)
-    };
-  };
-
-  const toggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      ))
-  };
-
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
-
+const App: React.FC = () => {
 
   return (
     <div className='app-container'>
-      <TabNav.Root size="2" justify="end" color="pink">
+      <TabNav.Root size="2" justify="end" color="green">
         <TabNav.Link href="#" active>
           Account
         </TabNav.Link>
         <TabNav.Link href="#">Documents</TabNav.Link>
         <TabNav.Link href="#">Settings</TabNav.Link>
       </TabNav.Root>
-      <Container maxWidth="400px" align="center">
+      <Container align="center">
+        {/* Table Component */}
+        <Table.Root mt="4" variant="surface">
+          <Table.Header style={{ backgroundColor: 'var(--green-9)' }}>
+            <Table.Row>
+              <Table.ColumnHeaderCell>Filaname</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Size</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Upload Start</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Upload FInish</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Duration</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>File Type</Table.ColumnHeaderCell>
+            </Table.Row>
+          </Table.Header>
 
-        <Flex gap="3" align="center" mb="4">
-          <Heading size="9" weight="medium" mb="4" mt="6" color='pink'>
-            Todo List
-          </Heading>
-        </Flex>
-        <Flex gap="3" align="center" mb="4" >
-          <TextField.Root size="3" placeholder="Add a new todo" value={newTodoText} onChange={handleInputChange}>
-            <TextField.Slot>
-            </TextField.Slot>
-          </TextField.Root>
-          <Button color="blue" variant="solid" onClick={addTodo} size="3">
-            <PlusCircledIcon></PlusCircledIcon>
-          </Button>
-        </Flex>
-
-        <Flex direction="column" gap="3">
-          {todos.map((todo) => (
-            <Card key={todo.id} size="1" mb="2" >
-              <Flex align="center" gap="3" justify="between"  >
-                <Checkbox
-                  checked={todo.completed}
-                  onCheckedChange={() => toggleTodo(todo.id)}
-                />
-                <Text
-                  size="3"
-                  style={{
-                    textDecoration: todo.completed ? 'line-through' : 'none',
-                    color: todo.completed ? "var(--gray-11)" : "var(--gray-12)",
-                  }}
-                >
-                  {todo.text}
-                </Text>
-                <Button variant="solid" color="red" size="2" onClick={() => deleteTodo(todo.id)}>
-                  <TrashIcon></TrashIcon>Delete
-                </Button>
-              </Flex>
-
-            </Card>
-          ))}
-        </Flex>
-
-        {todos.length === 0 && (
-          <Text mt="4" size="3" color="gray">
-            No todos yet. Add one!
-          </Text>
-        )}
+          <Table.Body style={{ backgroundColor: 'var(--green-2)' }}>
+            {data.map((item) => (
+              <Table.Row key={item.id}>
+                <Table.RowHeaderCell>{item.filename}</Table.RowHeaderCell>
+                <Table.Cell>{item.fileSize}</Table.Cell>
+                <Table.Cell>{formatDate(item.uploadStart)}</Table.Cell>
+                <Table.Cell>{formatDate(item.uploadFinish)}</Table.Cell>
+                <Table.Cell>{calculateDuration(item.uploadStart, item.uploadFinish)}</Table.Cell>
+                <Table.Cell>{item.fileExtension}</Table.Cell>
+              </Table.Row>
+            ))}
+          </Table.Body>
+        </Table.Root>
       </Container>
     </div>
 
@@ -108,4 +68,4 @@ const TodoList: React.FC = () => {
 
 
 
-export default TodoList;
+export default App;
